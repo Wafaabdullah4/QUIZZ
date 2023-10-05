@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QUIZZ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <link href="/assets/css/styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <button class="burger" onclick="toggleMenu()"></button> 
+    <div class="background"></div>
+    <div class="menu">
+      <nav>
+        <a style="animation-delay: 0.2s">Test Wawasam</a>
+        <a style="animation-delay: 0.3s">404</a>
+        <a style="animation-delay: 0.4s">404</a>
+        <a style="animation-delay: 0.5s">404</a>
+      </nav>
+    </div>
+
+
+    <div
+      id="opening_window"
+      style="
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      "
+    >
+      <h1 style="text-align: center;">Test Wawasan</h1>
+      <button onclick="startQuiz()" style="border: 1px solid white; padding: 10px 100px; margin: auto; ">Mulai</button>
+    </div>
+
+    <div id="quiz_window" class="hidden">
+      <h1 id="question"></h1>
+
+      <div class="pilihan">
+        <input type="radio" name="choices" id="choice0" data-id="0"  />
+        <label for="choice0" id="choiceText0"></label>
+      </div>
+      <div class="pilihan">
+        <input type="radio" name="choices" id="choice1" data-id="1" />
+        <label for="choice1" id="choiceText1"></label>
+      </div>
+      <div class="pilihan">
+        <input type="radio" name="choices" id="choice2" data-id="2" />
+        <label for="choice2" id="choiceText2"></label>
+      </div>
+      <div class="pilihan">
+        <input type="radio" name="choices" id="choice3" data-id="3" />
+        <label for="choice3" id="choiceText3"></label>
+      </div>
+      <button onclick="nextQuestion()"  style="border: 1px solid white; padding: 10px 100px; margin:10px auto; ">Next</button>
+    </div>
+
+    <div id="closing_window" class="hidden">
+      <h1>quizz selesai</h1>
+      <h2 id="scoreText"></h2>
+    </div>
+    <script type="text/javascript">
+   //===================Data===============//
+   const DB_QUIZZ = [
+       {
+         question: "Ibu Kota Palestina ?",
+         answers: ["Sana", "Yarussalem", "Tokyo", "Baghdad"],
+       },
+       {
+         question: "SEA GAMES diadakan setiap berapa tahun sekali?",
+         answers: [
+           "1 Tahun Sekali",
+           "2 Tahun Sekali",
+           "3 Tahun Sekali",
+           "5 Tahun Sekali",
+         ],
+       },
+       {
+         question: "Nama lain dari Negara Inggris adalah ?",
+         answers: ["Britania Raya", "Amsterdam", "Netherland", "Chichaheum"],
+       },
+       {
+         question: "Candi Borobudur merupakan candi agama ?",
+         answers: ["Hindu", "Konghuchu", "Katholik", "Buddha"],
+       },
+       {
+         question: "Pegunungan Tinggi di dunia adalah ?",
+         answers: ["Everest", "Puncak Jaya", "Kini Balu", "Puncak merapi"],
+       },
+       {
+         question: "Benua yang di juluki dengan nama Benua Biru adalah ?",
+         answers: [
+           "Benua Amerika",
+           "Benua Eropa",
+           "Benua Asia",
+           "Benua Afrika",
+         ],
+       },
+       {
+         question: "Planet yang memiliki cincin adalah ?",
+         answers: ["jupiter", "Uranus", "Saturnus", "Neptunus"],
+       },
+       {
+         question: "Apa nama ibu kota negara Philipina ?",
+         answers: ["Kuala Lumpur", "Manila", "Bangkok", "Hanoi"],
+       },
+       {
+         question: "Julukan kota Pelajar di Indonesia adalah ?",
+         answers: ["Palembang", "Solo", "Yogyakarta", "Chichaheum"],
+       },
+       {
+         question: "Ibu Kota negara Korea Selatan ?",
+         answers: ["Busan", "Seoul", "Pyongyang", "Sejong"],
+       },
+       {
+         question: "Negara dengan julukan tirai bambu adalah ?",
+         answers: ["Republik Rakyat Cina", "Jepang", "Singapura", "Prancis"],
+       },
+       {
+         question: "Sungai terpanjang di dunia adalah ?",
+         answers: ["Gangga", "Nil", "Kapuas", "Amazon"],
+       },
+       {
+         question: "Negeri Paman Sam adalah julukan untuk ?",
+         answers: ["Amerika", "Eropa", "Australia", "Saudi Arabia"],
+       },
+       {
+         question: "Benua Amerika ditemukan oleh ?",
+         answers: [
+           "Neil Amstrong",
+           "Christoper Colombus",
+           "Donald Trump",
+           "Farhanadbas",
+         ],
+       },
+       {
+         question: "Pulau Greenland terletak di ?",
+         answers: ["Asia", "India", "Afrika", "Amerika Utara"],
+       },
+       {
+         question: "Mata uang Negara Jepang  ?",
+         answers: ["Yuan", "Yen", "Ringgit", "Peso"],
+       },
+       {
+         question: "Negara kincir angin adalah sebutan untuk negara ?",
+         answers: ["Amerika", "Inggris", "Belanda", "Turki"],
+       },
+       {
+         question: "Presiden ke 2 indonesia ?",
+         answers: ["Megawati", "Jokowi", "Soeharto", "Soekarno"],
+       },
+       {
+         question: "Siapakah pemimpin NAZI ?",
+         answers: ["Colombus", "Rajusosion", "Hitler", "Samsudin"],
+       },
+       {
+         question: "Siapa waifu adam ?",
+         answers: ["Momochi", "Sakura", "Shizuka", " yor"],
+       },
+     ];
+
+     const CORRECT_ANSWER = [
+       1,
+       1,
+       0,
+       3,
+       0,
+       1,
+       2,
+       1,
+       2,
+       1,
+       0,
+       1,
+       0,
+       1,
+       3,
+       1,
+       2,
+       2,
+       2,
+       3,
+     ];
+
+     //==========Setup Question =======///
+
+     function startQuiz() {
+       document.getElementById("opening_window").style.display = "none";
+       document.getElementById("quiz_window").style.display = "block";
+     }
+
+     let current_q = 0;
+     let total_score = 0;
+     let save_answer = [];
+
+     document.addEventListener("DOMContentLoaded", function (event) {
+       setupQuestion();
+     });
+
+     function setupQuestion() {
+       document.getElementById("question").innerText =
+         DB_QUIZZ[current_q]["question"];
+
+       document.getElementById("choiceText0").innerText =
+         DB_QUIZZ[current_q]["answers"][0];
+       document.getElementById("choiceText1").innerText =
+         DB_QUIZZ[current_q]["answers"][1];
+       document.getElementById("choiceText2").innerText =
+         DB_QUIZZ[current_q]["answers"][2];
+       document.getElementById("choiceText3").innerText =
+         DB_QUIZZ[current_q]["answers"][3];
+     }
+
+     function nextQuestion() {
+       current_q++;
+
+       saveAnswer();
+
+       if (current_q > DB_QUIZZ.length - 1) stopQuiz();
+
+       resetState();
+       setupQuestion();
+     }
+
+     function resetState() {
+       const choosedAnswer = document.querySelector(
+         'input[name="choices"]:checked'
+       );
+       if (choosedAnswer != null) choosedAnswer.checked = false;
+     }
+
+     function stopQuiz() {
+       checkScore();
+
+       document.getElementById("quiz_window").style.display = "none";
+       document.getElementById("closing_window").style.display = "block";
+
+       document.getElementById("scoreText").innerHTML =
+         "Score Kamu " + total_score;
+       return;
+     }
+
+     function saveAnswer() {
+       const answers = document.querySelector('input[name="choices"]:checked');
+       if (answers != null) {
+         save_answer.push(parseInt(answers.getAttribute("data-id")));
+       } else {
+         //default answer tidak dijawab
+         save_answer.push(8);
+       }
+     }
+
+     function checkScore() {
+       for (i = 0; i < save_answer.length; i++) {
+         if (save_answer[i] == CORRECT_ANSWER[i]) {
+           total_score += 5;
+         }
+       }
+     }
+
+
+
+
+      const toggleMenu = () => document.body.classList.toggle("open");
+    </script>
+  </body>
+</html>
